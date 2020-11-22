@@ -29,7 +29,7 @@ class MuZeroConfig:
         self.players = list(range(2))
         # Number of previous observations and previous actions
         # to add to the current observation
-        self.stacked_observations = 8
+        self.stacked_observations = 5
 
         # Evaluate
         # Turn Muzero begins to play
@@ -48,7 +48,7 @@ class MuZeroConfig:
         # Maximum number of moves if game is not finished before
         self.max_moves = 100
         # Number of future moves self-simulated NOTE: from paper
-        self.num_simulations = 50
+        self.num_simulations = 80
         # Chronological discount of the reward
         self.discount = 1
         # Number of moves before dropping the temperature given by visit_
@@ -79,7 +79,7 @@ class MuZeroConfig:
         # Number of blocks in the ResNet
         self.blocks = 16
         # Number of channels in the ResNet
-        self.channels = 128
+        self.channels = 256
         # Number of channels in reward head
         self.reduced_channels_reward = 2
         # Number of channels in value head
@@ -117,10 +117,9 @@ class MuZeroConfig:
         self.save_model = True
         # Total number of training steps
         # (ie weights update according to a batch)
-        # self.training_steps = 100_000
         self.training_steps = 1000
         # Number of parts of games to train on at each training step
-        self.batch_size = 2048
+        self.batch_size = 128
         # self.batch_size = 512
         # Number of training steps before using the model for self-playing
         self.checkpoint_interval = 100
@@ -132,7 +131,7 @@ class MuZeroConfig:
         self.train_on_gpu = torch.cuda.is_available()
 
         # "Adam" or "SGD". Paper uses SGD
-        self.optimizer = "Adam"
+        self.optimizer = "SGD"
         # L2 weights regularization
         self.weight_decay = 1e-4
         # Used only if optimizer is SGD
@@ -146,7 +145,7 @@ class MuZeroConfig:
 
         ### Replay Buffer
         # Number of self-play games to keep in the replay buffer
-        self.replay_buffer_size = 1_000_000
+        self.replay_buffer_size = 10000
         # Number of game moves to keep for every batch element
         self.num_unroll_steps = 5
         # Number of steps in the future to take into account for calculating the target value
@@ -193,9 +192,9 @@ class MuZeroConfig:
         Returns:
             Positive float.
         """
-        if trained_steps < 500e3:
+        if trained_steps < 0.5 * self.training_steps:
             return 1.0
-        elif trained_steps < 750e3:
+        elif trained_steps < 0.75 * self.training_steps:
             return 0.5
         else:
             return 0.25
