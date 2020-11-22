@@ -29,7 +29,7 @@ class MuZeroConfig:
         self.players = list(range(2))
         # Number of previous observations and previous actions
         # to add to the current observation
-        self.stacked_observations = 5
+        self.stacked_observations = 10
 
         # Evaluate
         # Turn Muzero begins to play
@@ -46,9 +46,9 @@ class MuZeroConfig:
         self.num_workers = 2
         self.selfplay_on_gpu = False
         # Maximum number of moves if game is not finished before
-        self.max_moves = 100
+        self.max_moves = 200
         # Number of future moves self-simulated NOTE: from paper
-        self.num_simulations = 80
+        self.num_simulations = 40
         # Chronological discount of the reward
         self.discount = 1
         # Number of moves before dropping the temperature given by visit_
@@ -69,7 +69,7 @@ class MuZeroConfig:
         # Value and reward are scaled (with almost sqrt) and encoded on a
         # vector with a range of -support_size to support_size.
         # Choose it so that support_size <= sqrt(max(abs(discounted reward)))
-        self.support_size = 10
+        self.support_size = 16
 
         # Residual Network
         # Downsample observations before representation network,
@@ -119,7 +119,7 @@ class MuZeroConfig:
         # (ie weights update according to a batch)
         self.training_steps = 1000
         # Number of parts of games to train on at each training step
-        self.batch_size = 128
+        self.batch_size = 256
         # self.batch_size = 512
         # Number of training steps before using the model for self-playing
         self.checkpoint_interval = 100
