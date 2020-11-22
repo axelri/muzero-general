@@ -117,11 +117,14 @@ class MuZeroConfig:
         self.save_model = True
         # Total number of training steps
         # (ie weights update according to a batch)
-        self.training_steps = 100_000
+        # self.training_steps = 100_000
+        self.training_steps = 1000
         # Number of parts of games to train on at each training step
         self.batch_size = 2048
+        # self.batch_size = 512
         # Number of training steps before using the model for self-playing
-        self.checkpoint_interval = 10_000
+        self.checkpoint_interval = 100
+        # self.checkpoint_interval = 100
         # Scale the value loss to avoid overfitting of the value function,
         # paper recommends 0.25 (See paper appendix Reanalyze)
         self.value_loss_weight = 0.25
@@ -209,7 +212,7 @@ class Game(AbstractGame):
 
     def step(self, action: int) -> Tuple[np.ndarray, float, bool]:
         observation, reward, done, info = self.env.step(action)
-        return observation, reward * 10, done
+        return observation, reward, done
 
     def to_play(self) -> int:
         """
