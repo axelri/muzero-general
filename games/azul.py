@@ -29,7 +29,7 @@ class MuZeroConfig:
         self.players = list(range(2))
         # Number of previous observations and previous actions
         # to add to the current observation
-        self.stacked_observations = 10
+        self.stacked_observations = 16
 
         # Evaluate
         # Turn Muzero begins to play
@@ -43,12 +43,12 @@ class MuZeroConfig:
         ### Self-Play
         # Number of simultaneous threads/workers self-playing
         # to feed the replay buffer
-        self.num_workers = 2
+        self.num_workers = 8
         self.selfplay_on_gpu = False
         # Maximum number of moves if game is not finished before
-        self.max_moves = 200
-        # Number of future moves self-simulated NOTE: from paper
-        self.num_simulations = 40
+        self.max_moves = 256
+        # Number of future moves self-simulated
+        self.num_simulations = len(self.action_space) # simulate whole action space
         # Chronological discount of the reward
         self.discount = 1
         # Number of moves before dropping the temperature given by visit_
@@ -57,7 +57,7 @@ class MuZeroConfig:
         self.temperature_threshold = None
 
         # Root prior exploration noise
-        self.root_dirichlet_alpha = 0.3
+        self.root_dirichlet_alpha = 0.3  # ~40 average legal moves
         self.root_exploration_fraction = 0.25
 
         # UCB formula
@@ -119,10 +119,9 @@ class MuZeroConfig:
         # (ie weights update according to a batch)
         self.training_steps = 1000
         # Number of parts of games to train on at each training step
-        self.batch_size = 256
-        # self.batch_size = 512
+        self.batch_size = 68
         # Number of training steps before using the model for self-playing
-        self.checkpoint_interval = 100
+        self.checkpoint_interval = 50
         # self.checkpoint_interval = 100
         # Scale the value loss to avoid overfitting of the value function,
         # paper recommends 0.25 (See paper appendix Reanalyze)
@@ -138,22 +137,22 @@ class MuZeroConfig:
         self.momentum = 0.9
 
         # Exponential learning rate schedule
-        self.lr_init = 0.002
+        self.lr_init = 0.01
         # Set it to 1 to use a constant learning rate
         self.lr_decay_rate = 0.9
-        self.lr_decay_steps = 10000
+        self.lr_decay_steps = int(400e3)
 
         ### Replay Buffer
         # Number of self-play games to keep in the replay buffer
-        self.replay_buffer_size = 10000
+        self.replay_buffer_size = 15000
         # Number of game moves to keep for every batch element
         self.num_unroll_steps = 5
         # Number of steps in the future to take into account for calculating the target value
-        self.td_steps = 5
+        self.td_steps = self.max_moves # Always use Monte Carlo return.
         # Prioritized Replay (See paper appendix Training),
         # select in priority the elements in the replay buffer
         # which are unexpected for the network
-        self.PER = True
+        self.PER = False  # board game
         # How much prioritization is used,
         # 0 corresponding to the uniform case, paper suggests 1
         self.PER_alpha = 0.5
@@ -179,7 +178,7 @@ class MuZeroConfig:
         # Desired training steps per self played step ratio.
         # Equivalent to a synchronous version, training can take much longer.
         # Set it to None to disable it
-        self.ratio = 1
+        self.ratio = 0.5
 
     def visit_softmax_temperature_fn(self, trained_steps: int) -> float:
         """
