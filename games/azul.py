@@ -130,7 +130,7 @@ class MuZeroConfig:
         self.train_on_gpu = torch.cuda.is_available()
 
         # "Adam" or "SGD". Paper uses SGD
-        self.optimizer = "Adam"
+        self.optimizer = "SGD"
         # L2 weights regularization
         self.weight_decay = 1e-4
         # Used only if optimizer is SGD
