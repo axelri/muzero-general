@@ -23,7 +23,7 @@ class MuZeroConfig:
 
         ### Game
         # (channel, height, width)
-        self.observation_shape = (5, 10, 10)
+        self.observation_shape = (3, 10, 10)
         self.action_space = list(range(10 * 5 * 5))
         # List of players
         self.players = list(range(2))
