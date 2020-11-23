@@ -6,7 +6,6 @@ import numpy as np
 import torch
 from gym_azul.model import action_from_action_num, action_num_from_action, \
     Action, Slot, Color, Line
-
 from .abstract_game import AbstractGame
 from gym_azul.envs import AzulEnv
 
@@ -48,7 +47,8 @@ class MuZeroConfig:
         # Maximum number of moves if game is not finished before
         self.max_moves = 256
         # Number of future moves self-simulated
-        self.num_simulations = len(self.action_space) # simulate whole action space
+        self.num_simulations = len(
+            self.action_space)  # simulate whole action space
         # Chronological discount of the reward
         self.discount = 1
         # Number of moves before dropping the temperature given by visit_
@@ -137,10 +137,10 @@ class MuZeroConfig:
         self.momentum = 0.9
 
         # Exponential learning rate schedule
-        self.lr_init = 0.01
+        self.lr_init = 0.002
         # Set it to 1 to use a constant learning rate
-        self.lr_decay_rate = 0.1
-        self.lr_decay_steps = int(400e3)
+        self.lr_decay_rate = 0.9
+        self.lr_decay_steps = 10000
 
         ### Replay Buffer
         # Number of self-play games to keep in the replay buffer
@@ -148,7 +148,7 @@ class MuZeroConfig:
         # Number of game moves to keep for every batch element
         self.num_unroll_steps = 5
         # Number of steps in the future to take into account for calculating the target value
-        self.td_steps = self.max_moves # Always use Monte Carlo return.
+        self.td_steps = self.max_moves  # Always use Monte Carlo return.
         # Prioritized Replay (See paper appendix Training),
         # select in priority the elements in the replay buffer
         # which are unexpected for the network
