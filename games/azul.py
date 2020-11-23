@@ -119,7 +119,7 @@ class MuZeroConfig:
         # (ie weights update according to a batch)
         self.training_steps = 1000
         # Number of parts of games to train on at each training step
-        self.batch_size = 68
+        self.batch_size = 64
         # Number of training steps before using the model for self-playing
         self.checkpoint_interval = 50
         # self.checkpoint_interval = 100
@@ -130,7 +130,7 @@ class MuZeroConfig:
         self.train_on_gpu = torch.cuda.is_available()
 
         # "Adam" or "SGD". Paper uses SGD
-        self.optimizer = "SGD"
+        self.optimizer = "Adam"
         # L2 weights regularization
         self.weight_decay = 1e-4
         # Used only if optimizer is SGD
@@ -139,7 +139,7 @@ class MuZeroConfig:
         # Exponential learning rate schedule
         self.lr_init = 0.01
         # Set it to 1 to use a constant learning rate
-        self.lr_decay_rate = 0.9
+        self.lr_decay_rate = 0.1
         self.lr_decay_steps = int(400e3)
 
         ### Replay Buffer
